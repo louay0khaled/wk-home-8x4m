@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0f13">
+<title>وكيل لؤي</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#0e0f13; --surface:#17181d; --surface2:#1e2026; --line:#26282f;
+    --text:#f2f2f4; --muted:#9a9ba4; --accent:#4da3ff; --gold:#d9a441; --green:#3fb96f;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; padding:0; background:var(--bg); color:var(--text);
+    font-family:"Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif;}
+  body{padding-bottom:86px}
+  header{position:sticky; top:0; z-index:10; background:rgba(14,15,19,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line); padding:14px 16px 10px}
+  .agent{display:flex; align-items:center; gap:12px}
+  .agent img{width:52px; height:52px; border-radius:16px}
+  .agent .name{font-size:20px; font-weight:700}
+  .agent .sub{color:var(--muted); font-size:13px; margin-top:2px}
+  .status{display:flex; align-items:center; gap:7px; margin-top:10px; font-size:13px; color:var(--muted)}
+  .dot{width:9px; height:9px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green)}
+  .updated{margin-inline-start:auto; font-size:12px}
+  main{padding:14px 14px 4px; max-width:720px; margin:0 auto}
+  .view{display:none}
+  .view.active{display:block}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    padding:14px; margin-bottom:10px; display:flex; gap:12px; align-items:flex-start}
+  .card .ic{font-size:26px; line-height:1.2; min-width:38px; text-align:center}
+  .card .body{flex:1; min-width:0}
+  .card .t{font-weight:700; font-size:16px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .badge{background:var(--gold); color:#181206; font-size:11px; font-weight:700;
+    padding:2px 8px; border-radius:999px}
+  .badge.wait{background:var(--accent); color:#08182e}
+  .card .d{color:var(--muted); font-size:13px; margin-top:2px}
+  .card .last{font-size:14px; line-height:1.75; margin-top:6px; color:#e8e8ec}
+  a.card{text-decoration:none; color:inherit}
+  a.card:active{background:var(--surface2)}
+  .arrow{color:var(--muted); font-size:20px; align-self:center}
+  .hint{background:var(--surface); border:1px dashed var(--line); border-radius:16px;
+    padding:12px 14px; color:var(--muted); font-size:13.5px; line-height:1.8; margin-bottom:10px}
+  .fab{position:fixed; bottom:96px; inset-inline-start:16px; z-index:20; background:#25d366; color:#062b16;
+    font-weight:700; font-size:15px; padding:13px 18px; border-radius:999px; text-decoration:none;
+    box-shadow:0 6px 20px rgba(0,0,0,.45); display:flex; gap:8px; align-items:center}
+  nav{position:fixed; bottom:0; right:0; left:0; z-index:15; background:rgba(20,21,26,.97);
+    border-top:1px solid var(--line); display:flex; padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  nav button{flex:1; background:none; border:0; color:var(--muted); font-family:inherit;
+    font-size:12.5px; padding:6px 2px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px}
+  nav button .ni{font-size:21px}
+  nav button.on{color:var(--accent)}
+  .refresh{background:var(--surface2); color:var(--text); border:1px solid var(--line);
+    border-radius:999px; padding:6px 14px; font-family:inherit; font-size:13px; cursor:pointer}
+  .err{color:#ff7b72; font-size:14px; padding:16px 4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="agent">
+    <img src="icon.svg" alt="">
+    <div>
+      <div class="name">وكيل لؤي</div>
+      <div class="sub">Louay's Assistant — مساعدك الشخصي</div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="dot"></span><span id="statusText">متصل عبر واتساب</span>
+    <span class="updated">آخر تحديث: <span id="updatedText">…</span></span>
+    <button class="refresh" id="refreshBtn">تحديث</button>
+  </div>
+</header>
+<main>
+  <section class="view active" id="view-home"></section>
+  <section class="view" id="view-goals"></section>
+  <section class="view" id="view-files"></section>
+</main>
+<a class="fab" href="https://wa.me/?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B" target="_blank" rel="noopener">✍️ راسلني على واتساب</a>
+<nav>
+  <button data-view="view-home" class="on"><span class="ni">💬</span>المحادثات</button>
+  <button data-view="view-goals"><span class="ni">🎯</span>الأهداف</button>
+  <button data-view="view-files"><span class="ni">📂</span>الملفات</button>
+</nav>
+<script>
+  const $ = (s) => document.querySelector(s);
+  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  function threadCard(t){
+    const badge = t.badge ? `<span class="badge ${t.badge === "بانتظارك" ? "wait" : ""}">${esc(t.badge)}</span>` : "";
+    return `<article class="card"><div class="ic">${esc(t.icon)}</div><div class="body">
+      <div class="t">${esc(t.title)} ${badge}</div>
+      <div class="d">${esc(t.date)}</div>
+      <div class="last">${esc(t.last)}</div></div></article>`;
+  }
+  function goalCard(g){
+    return `<article class="card"><div class="ic">${esc(g.icon)}</div><div class="body">
+      <div class="t">${esc(g.title)}</div>
+      <div class="last">${esc(g.state)}</div></div></article>`;
+  }
+  function fileCard(f){
+    if (f.url){
+      return `<a class="card" href="${esc(f.url)}" target="_blank" rel="noopener"><div class="ic">${esc(f.icon)}</div>
+        <div class="body"><div class="t">${esc(f.title)}</div><div class="last">${esc(f.desc)}</div></div>
+        <div class="arrow">‹</div></a>`;
+    }
+    return `<article class="card"><div class="ic">${esc(f.icon)}</div><div class="body">
+      <div class="t">${esc(f.title)}</div><div class="last">${esc(f.desc)}</div></div></article>`;
+  }
+  async function load(){
+    try{
+      const res = await fetch("data.json?ts=" + Date.now(), {cache:"no-store"});
+      if (!res.ok) throw new Error(res.status);
+      const d = await res.json();
+      $("#updatedText").textContent = d.updated || "";
+      $("#statusText").textContent = d.status || "متصل عبر واتساب";
+      $("#view-home").innerHTML =
+        `<div class="hint">هي لوحتك يا معلّم — آخر حالة كل مشروع ومحادثة. المراسلة من واتساب، والتحديثات بتنزل هون على دفعات. لتثبيت الصفحة كتطبيق: من قائمة المتصفح اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</div>` +
+        (d.threads || []).map(threadCard).join("");
+      $("#view-goals").innerHTML = (d.goals || []).map(goalCard).join("");
+      $("#view-files").innerHTML = (d.files || []).map(fileCard).join("");
+    }catch(e){
+      $("#view-home").innerHTML = `<div class="err">تعذّر تحميل البيانات — اضغط «تحديث» للمحاولة من جديد.</div>`;
+    }
+  }
+  document.querySelectorAll("nav button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("nav button").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.getElementById(btn.dataset.view).classList.add("active");
+      window.scrollTo({top:0});
+    });
+  });
+  $("#refreshBtn").addEventListener("click", load);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+  load();
+</script>
+</body>
+</html>
