@@ -1,140 +1,194 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e0f13">
-<title>وكيل لؤي</title>
+<meta name="theme-color" content="#000000">
+<title>Muse — وكيل لؤي</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="avatar.png">
 <style>
-  :root{
-    --bg:#0e0f13; --surface:#17181d; --surface2:#1e2026; --line:#26282f;
-    --text:#f2f2f4; --muted:#9a9ba4; --accent:#4da3ff; --gold:#d9a441; --green:#3fb96f;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-  html,body{margin:0; padding:0; background:var(--bg); color:var(--text);
-    font-family:"Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif;}
-  body{padding-bottom:86px}
-  header{position:sticky; top:0; z-index:10; background:rgba(14,15,19,.92); backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line); padding:14px 16px 10px}
-  .agent{display:flex; align-items:center; gap:12px}
-  .agent img{width:52px; height:52px; border-radius:16px}
-  .agent .name{font-size:20px; font-weight:700}
-  .agent .sub{color:var(--muted); font-size:13px; margin-top:2px}
-  .status{display:flex; align-items:center; gap:7px; margin-top:10px; font-size:13px; color:var(--muted)}
-  .dot{width:9px; height:9px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green)}
-  .updated{margin-inline-start:auto; font-size:12px}
-  main{padding:14px 14px 4px; max-width:720px; margin:0 auto}
-  .view{display:none}
-  .view.active{display:block}
-  .card{background:var(--surface); border:1px solid var(--line); border-radius:16px;
-    padding:14px; margin-bottom:10px; display:flex; gap:12px; align-items:flex-start}
-  .card .ic{font-size:26px; line-height:1.2; min-width:38px; text-align:center}
-  .card .body{flex:1; min-width:0}
-  .card .t{font-weight:700; font-size:16px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-  .badge{background:var(--gold); color:#181206; font-size:11px; font-weight:700;
-    padding:2px 8px; border-radius:999px}
-  .badge.wait{background:var(--accent); color:#08182e}
-  .card .d{color:var(--muted); font-size:13px; margin-top:2px}
-  .card .last{font-size:14px; line-height:1.75; margin-top:6px; color:#e8e8ec}
-  a.card{text-decoration:none; color:inherit}
-  a.card:active{background:var(--surface2)}
-  .arrow{color:var(--muted); font-size:20px; align-self:center}
-  .hint{background:var(--surface); border:1px dashed var(--line); border-radius:16px;
-    padding:12px 14px; color:var(--muted); font-size:13.5px; line-height:1.8; margin-bottom:10px}
-  .fab{position:fixed; bottom:96px; inset-inline-start:16px; z-index:20; background:#25d366; color:#062b16;
-    font-weight:700; font-size:15px; padding:13px 18px; border-radius:999px; text-decoration:none;
-    box-shadow:0 6px 20px rgba(0,0,0,.45); display:flex; gap:8px; align-items:center}
-  nav{position:fixed; bottom:0; right:0; left:0; z-index:15; background:rgba(20,21,26,.97);
-    border-top:1px solid var(--line); display:flex; padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
-  nav button{flex:1; background:none; border:0; color:var(--muted); font-family:inherit;
-    font-size:12.5px; padding:6px 2px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px}
-  nav button .ni{font-size:21px}
-  nav button.on{color:var(--accent)}
-  .refresh{background:var(--surface2); color:var(--text); border:1px solid var(--line);
-    border-radius:999px; padding:6px 14px; font-family:inherit; font-size:13px; cursor:pointer}
-  .err{color:#ff7b72; font-size:14px; padding:16px 4px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#000;--surface:#101114;--surface2:#17181d;--border:#222329;--text:#f4f4f6;--muted:#9b9ca6;--blue:#2f7bff;--user:#1d3f74;--agent:#17181d}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img.av{border-radius:50%;object-fit:cover;flex:none;background:#222}
+header{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.92);z-index:5}
+header .who{flex:1;min-width:0}
+header .nm{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .st{font-size:12px;color:#4cc38a;margin-top:1px}
+header .gear{color:var(--muted);display:flex;padding:6px}
+.screen{display:none;min-height:100%}
+.screen.on{display:block}
+.sec-t{padding:18px 16px 8px;font-size:13px;color:var(--muted)}
+.updated{padding:10px 16px 0;font-size:12px;color:var(--muted)}
+main{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.search{padding:12px 16px 4px}
+.search input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.search input::placeholder{color:var(--muted)}
+.chatrow{display:flex;gap:12px;align-items:center;width:100%;text-align:right;padding:12px 16px;border-bottom:1px solid #141519}
+.chatrow:active{background:var(--surface)}
+.chatrow .mid{flex:1;min-width:0}
+.chatrow .nm{font-size:16px;font-weight:600;display:flex;gap:6px;align-items:center}
+.chatrow .nm .pin{color:var(--muted);display:inline-flex}
+.chatrow .pv{font-size:13.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.chatrow .tm{font-size:11.5px;color:var(--muted);flex:none;align-self:flex-start;padding-top:4px}
+#screen-thread{display:none;flex-direction:column;height:100%}
+#screen-thread.on{display:flex}
+#thread-main{padding:14px 12px 8px;display:flex;flex-direction:column;gap:8px}
+.bub{max-width:82%;padding:10px 13px;border-radius:18px;font-size:15px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.bub.a{background:var(--agent);align-self:flex-start;border-bottom-right-radius:6px}
+.bub.u{background:var(--user);align-self:flex-end;border-bottom-left-radius:6px}
+.bub.s{background:transparent;border:1px dashed var(--border);color:var(--muted);align-self:center;text-align:center;font-size:13px;max-width:92%}
+.bub .via{display:block;margin-top:5px;font-size:11px;color:var(--muted)}
+.composer{display:flex;gap:8px;align-items:flex-end;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:#050506}
+.composer textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:22px;color:var(--text);padding:11px 16px;font-size:15.5px;font-family:inherit;resize:none;max-height:110px;outline:none;line-height:1.4}
+.composer textarea::placeholder{color:var(--muted)}
+.send{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.send svg{transform:scaleX(-1)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:15px 16px;margin:10px 16px}
+.card .k{font-size:11.5px;color:var(--blue);font-weight:700}
+.card h3{font-size:16px;margin:5px 0 6px;line-height:1.5}
+.card p{font-size:14px;color:#cfcfd6;line-height:1.7}
+.card .tm{font-size:12px;color:var(--muted);margin-top:8px}
+.badge{display:inline-block;background:#13294d;color:#7db1ff;font-size:11.5px;padding:3px 10px;border-radius:99px;margin-top:9px}
+a.file{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:15px 16px;margin:10px 16px;color:var(--text);text-decoration:none;font-size:15px}
+a.file .ic{color:var(--blue);display:flex}
+a.file span{flex:1}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.8}
+nav{display:flex;border-top:1px solid var(--border);background:rgba(5,5,6,.97);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;color:var(--muted);font-size:11px}
+nav button.on{color:#fff}
+nav.hide{display:none}
 </style>
 </head>
 <body>
-<header>
-  <div class="agent">
-    <img src="icon.svg" alt="">
-    <div>
-      <div class="name">وكيل لؤي</div>
-      <div class="sub">Louay's Assistant — مساعدك الشخصي</div>
-    </div>
-  </div>
-  <div class="status">
-    <span class="dot"></span><span id="statusText">متصل عبر واتساب</span>
-    <span class="updated">آخر تحديث: <span id="updatedText">…</span></span>
-    <button class="refresh" id="refreshBtn">تحديث</button>
-  </div>
+
+<header id="hdr">
+  <img class="av" src="avatar.png" width="40" height="40" alt="">
+  <div class="who"><div class="nm">Louay's Assistant</div><div class="st">متصل — عبر واتساب</div></div>
+  <span class="gear"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h0A1.7 1.7 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09c0 .68.4 1.3 1 1.55.61.26 1.32.1 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v0c.26.6.87 1 1.55 1H21a2 2 0 1 1 0 4h-.09c-.68 0-1.3.4-1.51 1z"/></svg></span>
 </header>
-<main>
-  <section class="view active" id="view-home"></section>
-  <section class="view" id="view-goals"></section>
-  <section class="view" id="view-files"></section>
+
+<main id="main-scroll">
+  <section class="screen on" id="screen-chats">
+    <div class="search"><input id="q" type="search" placeholder="بحث في المحادثات"></div>
+    <div class="updated" id="updated"></div>
+    <div id="chatlist"></div>
+  </section>
+
+  <section class="screen" id="screen-feed"><div class="sec-t">الموجز — آخر ما كتبه وكيلك لك</div><div id="feedlist"></div></section>
+
+  <section class="screen" id="screen-ideas"><div class="sec-t">أفكار مقترحة من وكيلك</div><div id="idealist"></div></section>
+
+  <section class="screen" id="screen-goals"><div class="sec-t">أهدافك النشطة</div><div id="goallist"></div></section>
+
+  <section class="screen" id="screen-files"><div class="sec-t">المكتبة — ملفات وروابط</div><div id="filelist"></div></section>
 </main>
-<a class="fab" href="https://wa.me/?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B" target="_blank" rel="noopener">✍️ راسلني على واتساب</a>
-<nav>
-  <button data-view="view-home" class="on"><span class="ni">💬</span>المحادثات</button>
-  <button data-view="view-goals"><span class="ni">🎯</span>الأهداف</button>
-  <button data-view="view-files"><span class="ni">📂</span>الملفات</button>
+
+<section id="screen-thread">
+  <header>
+    <button id="back" aria-label="رجوع" style="display:flex;padding:6px;color:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <img class="av" src="avatar.png" width="38" height="38" alt="">
+    <div class="who"><div class="nm" id="thread-name"></div><div class="st">وكيلك — الرد عبر واتساب</div></div>
+  </header>
+  <main id="thread-main"></main>
+  <div class="composer">
+    <textarea id="box" rows="1" placeholder="اكتب رسالة..."></textarea>
+    <button class="send" id="send" aria-label="إرسال"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.8-7.5c.8-.35.8-1.45 0-1.8L3.4 3.6c-.66-.29-1.39.2-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .72.73 1.2 1.39.91z"/></svg></button>
+  </div>
+</section>
+
+<nav id="tabbar">
+  <button data-tab="chats" class="on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>الدردشة</button>
+  <button data-tab="feed"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16"/><path d="M4 2v20"/><path d="M20 9H8"/><path d="M20 15H8"/></svg>الموجز</button>
+  <button data-tab="ideas"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>الأفكار</button>
+  <button data-tab="goals"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>الأهداف</button>
+  <button data-tab="files"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>المكتبة</button>
 </nav>
+
 <script>
-  const $ = (s) => document.querySelector(s);
-  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-  function threadCard(t){
-    const badge = t.badge ? `<span class="badge ${t.badge === "بانتظارك" ? "wait" : ""}">${esc(t.badge)}</span>` : "";
-    return `<article class="card"><div class="ic">${esc(t.icon)}</div><div class="body">
-      <div class="t">${esc(t.title)} ${badge}</div>
-      <div class="d">${esc(t.date)}</div>
-      <div class="last">${esc(t.last)}</div></div></article>`;
-  }
-  function goalCard(g){
-    return `<article class="card"><div class="ic">${esc(g.icon)}</div><div class="body">
-      <div class="t">${esc(g.title)}</div>
-      <div class="last">${esc(g.state)}</div></div></article>`;
-  }
-  function fileCard(f){
-    if (f.url){
-      return `<a class="card" href="${esc(f.url)}" target="_blank" rel="noopener"><div class="ic">${esc(f.icon)}</div>
-        <div class="body"><div class="t">${esc(f.title)}</div><div class="last">${esc(f.desc)}</div></div>
-        <div class="arrow">‹</div></a>`;
-    }
-    return `<article class="card"><div class="ic">${esc(f.icon)}</div><div class="body">
-      <div class="t">${esc(f.title)}</div><div class="last">${esc(f.desc)}</div></div></article>`;
-  }
-  async function load(){
-    try{
-      const res = await fetch("data.json?ts=" + Date.now(), {cache:"no-store"});
-      if (!res.ok) throw new Error(res.status);
-      const d = await res.json();
-      $("#updatedText").textContent = d.updated || "";
-      $("#statusText").textContent = d.status || "متصل عبر واتساب";
-      $("#view-home").innerHTML =
-        `<div class="hint">هي لوحتك يا معلّم — آخر حالة كل مشروع ومحادثة. المراسلة من واتساب، والتحديثات بتنزل هون على دفعات. لتثبيت الصفحة كتطبيق: من قائمة المتصفح اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</div>` +
-        (d.threads || []).map(threadCard).join("");
-      $("#view-goals").innerHTML = (d.goals || []).map(goalCard).join("");
-      $("#view-files").innerHTML = (d.files || []).map(fileCard).join("");
-    }catch(e){
-      $("#view-home").innerHTML = `<div class="err">تعذّر تحميل البيانات — اضغط «تحديث» للمحاولة من جديد.</div>`;
-    }
-  }
-  document.querySelectorAll("nav button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("nav button").forEach(b => b.classList.remove("on"));
-      btn.classList.add("on");
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      document.getElementById(btn.dataset.view).classList.add("active");
-      window.scrollTo({top:0});
-    });
+var D=null, curChat=null;
+var PIN='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm5-12V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1a3 3 0 0 0 3 3h.5v4.6l-2 2.4a1 1 0 0 0 .77 1.64h5.46A1 1 0 0 0 15.5 15l-2-2.4V8h.5a3 3 0 0 0 3-3z" transform="rotate(45 12 12)"/></svg>';
+var DOC='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>';
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function show(tab){
+  ["chats","feed","ideas","goals","files"].forEach(function(t){
+    document.getElementById("screen-"+t).classList.toggle("on", t===tab);
   });
-  $("#refreshBtn").addEventListener("click", load);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
-  load();
+  document.querySelectorAll("#tabbar button").forEach(function(b){b.classList.toggle("on", b.dataset.tab===tab)});
+  document.getElementById("main-scroll").scrollTop=0;
+}
+document.querySelectorAll("#tabbar button").forEach(function(b){b.addEventListener("click", function(){show(b.dataset.tab)})});
+function renderChats(filter){
+  var el=document.getElementById("chatlist"); el.innerHTML="";
+  (D.chats||[]).forEach(function(c, i){
+    if(filter && c.name.indexOf(filter)===-1) return;
+    var b=document.createElement("button"); b.className="chatrow";
+    b.innerHTML='<img class="av" src="avatar.png" width="50" height="50" alt="">'+
+      '<div class="mid"><div class="nm">'+esc(c.name)+(c.pin?'<span class="pin">'+PIN+'</span>':"")+'</div>'+
+      '<div class="pv">'+esc(c.preview)+'</div></div><div class="tm">'+esc(c.time)+'</div>';
+    b.addEventListener("click", function(){openChat(i)});
+    el.appendChild(b);
+  });
+  if(!el.children.length) el.innerHTML='<div class="empty">لا نتائج مطابقة</div>';
+}
+function openChat(i){
+  curChat=D.chats[i];
+  document.getElementById("thread-name").textContent=curChat.name;
+  var m=document.getElementById("thread-main"); m.innerHTML="";
+  (curChat.msgs||[]).forEach(function(x){ addBub(x.f, x.t, false); });
+  document.getElementById("hdr").style.display="none";
+  document.getElementById("main-scroll").style.display="none";
+  document.getElementById("tabbar").classList.add("hide");
+  document.getElementById("screen-thread").classList.add("on");
+  m.scrollTop=m.scrollHeight;
+}
+function addBub(f, t, via){
+  var m=document.getElementById("thread-main");
+  var d=document.createElement("div"); d.className="bub "+f; d.textContent=t;
+  if(via){ var s=document.createElement("span"); s.className="via"; s.textContent="أُرسلت عبر واتساب"; d.appendChild(s); }
+  m.appendChild(d); m.scrollTop=m.scrollHeight;
+}
+function closeChat(){
+  document.getElementById("screen-thread").classList.remove("on");
+  document.getElementById("hdr").style.display="";
+  document.getElementById("main-scroll").style.display="";
+  document.getElementById("tabbar").classList.remove("hide");
+}
+document.getElementById("back").addEventListener("click", closeChat);
+document.getElementById("q").addEventListener("input", function(e){ renderChats(e.target.value.trim()); });
+var box=document.getElementById("box");
+box.addEventListener("input", function(){ box.style.height="auto"; box.style.height=Math.min(box.scrollHeight,110)+"px"; });
+function send(){
+  var t=box.value.trim(); if(!t) return;
+  addBub("u", t, true); box.value=""; box.style.height="auto";
+  var link="https://wa.me/?text="+encodeURIComponent("["+(curChat?curChat.name:"المحادثة الرئيسية")+"] "+t);
+  setTimeout(function(){ window.open(link, "_blank"); }, 350);
+}
+document.getElementById("send").addEventListener("click", send);
+box.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); send(); } });
+function render(){
+  document.getElementById("updated").textContent="آخر تحديث: "+(D.updated||"");
+  renderChats("");
+  document.getElementById("feedlist").innerHTML=(D.feed||[]).map(function(f){
+    return '<div class="card"><div class="k">'+esc(f.k)+'</div><h3>'+esc(f.h)+'</h3><p>'+esc(f.b)+'</p><div class="tm">'+esc(f.time)+'</div></div>';
+  }).join("") || '<div class="empty">لا منشورات بعد</div>';
+  document.getElementById("idealist").innerHTML=(D.ideas||[]).map(function(f){
+    return '<div class="card"><h3>'+esc(f.h)+'</h3><p>'+esc(f.b)+'</p></div>';
+  }).join("") || '<div class="empty">لا أفكار بعد</div>';
+  document.getElementById("goallist").innerHTML=(D.goals||[]).map(function(g){
+    return '<div class="card"><h3>'+esc(g.title)+'</h3><span class="badge">'+esc(g.badge)+'</span></div>';
+  }).join("") || '<div class="empty">لا أهداف بعد</div>';
+  document.getElementById("filelist").innerHTML=(D.files||[]).map(function(f){
+    return '<a class="file" href="'+esc(f.url)+'" target="_blank" rel="noopener"><span class="ic">'+DOC+'</span><span>'+esc(f.name)+'</span></a>';
+  }).join("") || '<div class="empty">لا ملفات بعد</div>';
+}
+fetch("data.json", {cache:"no-store"}).then(function(r){return r.json()}).then(function(d){ D=d; render(); })
+.catch(function(){ document.getElementById("chatlist").innerHTML='<div class="empty">تعذر تحميل البيانات — تحقق من الاتصال وحدّث الصفحة</div>'; });
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("sw.js").catch(function(){}); }
 </script>
 </body>
 </html>
